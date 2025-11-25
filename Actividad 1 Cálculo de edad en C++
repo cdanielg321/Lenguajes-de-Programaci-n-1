@@ -1,0 +1,18 @@
+// Programa en c++ para corroborar la mayoria de edad 
+
+#include <iostream> // biblioteca para utilizar cout y cin
+using namespace std; // nos permitira usar elementos del std sin escribirlo en cada linea
+
+int main()
+
+{ int edad; //variable para almacenar la edad
+
+cout << "Ingresa tu Edad.";
+cin >> edad; // guarda la edad ingresada
+
+if (edad>=18) {cout <<"Bienvenido, eres Mayor de Edad." << endl; } 
+// si la edad es 18 o mayor despliega el mensaje
+
+else {cout << "Bienvenido, eres Menor de Edad." << endl; }
+// cualquier edad menor a 18 despliega el mensaje 
+return 0; }
