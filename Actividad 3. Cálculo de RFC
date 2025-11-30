@@ -1,0 +1,134 @@
+/****************************
+Actividad no.3 
+Descripción: Cálculo de RFC sin homoclave
+Autor: Daniel Gutiérrez
+Basado en código del Profesor Francisco Ortega 
+*******************************/
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+// Dicionario de palabras NO permitidas
+const std::vector<std::string> palabrasProhibidas = {
+    "PUTA", "PUTO", "PEDO", "CULO", "POPO", "PENE", "LOCO"
+};
+
+// Convierte a mayúsculas
+std::string convertirMayusculas(std::string str) {
+    std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+    return str;
+}
+
+// Verifica y modifica palabras prohibidas del diccionario
+std::string corregirRFC(const std::string& rfc) {
+    for (const std::string& palabra : palabrasProhibidas) {
+        if (rfc == palabra) {
+            return rfc.substr(0, 3) + "X"; // Reemplaza la última letra por X
+        }
+    }
+    return rfc;
+}
+
+// Funcion para obtener la primera vocal interna de una cadena
+char obtenerPrimeraVocalInterna(const std::string& str) {
+    for (size_t i = 1; i < str.length(); ++i) {
+        char c = str[i];
+        if (c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U')
+            return c;
+    }
+    return 'X'; // Si no hay vocal interna
+}
+
+// Funcion para validar el formato de la fecha (YYY=YYYY-MM-DD)
+bool validarFormatoFecha(const std::string& fecha) {
+    if (fecha.length() != 10)
+        return false;
+
+    // Verifica guiones
+    if (fecha[4] != '-' || fecha[7] != '-')
+        return false;
+
+    // Verifica que los demás caracteres sean dígitos
+    for (int i = 0; i < fecha.length(); i++) {
+        if (i == 4 || i == 7) continue; 
+        if (!isdigit(fecha[i])) return false;
+    }
+
+    return true;
+}
+
+// Función principal para calcular el RFC 
+std::string calcularRFC(std::string nombre, std::string apellidoPaterno,
+                        std::string apellidoMaterno, std::string fechaNacimiento) {
+
+    // Convertir todo a mayúsculas
+    nombre = convertirMayusculas(nombre);
+    apellidoPaterno = convertirMayusculas(apellidoPaterno);
+    apellidoMaterno = convertirMayusculas(apellidoMaterno);
+
+    // Se declara la variable donde guardaremos el RFC
+    std::string rfc;
+
+    // Validar que se ingresaron los datos necesarios
+    if (apellidoPaterno.empty() || nombre.empty() || fechaNacimiento.length() < 10) {
+        return "ERROR_DATOS_INVALIDOS";
+    }
+
+    // Se obtiene la letra inicial y la primera vocal interna del apellido Paterno
+    char letraInicial = apellidoPaterno[0];
+    char primeraVocalInterna = obtenerPrimeraVocalInterna(apellidoPaterno);
+    
+    // Se obtiene la incial del apellido materno o se usa una 'X' si no existe
+    char inicialApellidoMaterno = (!apellidoMaterno.empty()) ? apellidoMaterno[0] : 'X';
+    //Se obtiene la inicial del primer nombre
+    char inicialNombre = nombre[0];
+
+    // Construcción parcial del RFC para descartar las Palabras Prohibidas 
+    rfc = letraInicial;
+    rfc += primeraVocalInterna;
+    rfc += inicialApellidoMaterno;
+    rfc += inicialNombre;
+
+    //Se ejecuta la comparacion de malas palabras en el diccionario y se sustituye con una 'X'
+    rfc = corregirRFC(rfc);
+
+    //Se obtienen los dos ultimos digitos del año de nacimiento
+    std::string anio = fechaNacimiento.substr(2, 2);
+    
+    //Se obtiene el mes y dia de nacimiento
+    std::string mes  = fechaNacimiento.substr(5, 2);
+    std::string dia  = fechaNacimiento.substr(8, 2);
+
+    // Realizar la correccion y se continua creando el rfc
+    rfc += anio;
+    rfc += mes;
+    rfc += dia;
+
+    return rfc;
+}
+
+int main() {
+    
+    // Escribe en consola los pasos a seguir y espera los datos en sin importar mayusculas o minusculas
+    std::string nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento;
+
+    std::cout << "Introduce tu Nombre: ";
+    std::getline(std::cin, nombre);
+
+    std::cout << "Introduce tu Apellido Paterno: ";
+    std::getline(std::cin, apellidoPaterno);
+
+    std::cout << "Introduce tu Apellido Materno (Si no presione Enter): ";
+    std::getline(std::cin, apellidoMaterno);
+
+    std::cout << "Introduce la fecha de nacimiento (YYYY-MM-DD): ";
+    std::getline(std::cin, fechaNacimiento);
+
+    std::string rfc = calcularRFC(nombre, apellidoPaterno, apellidoMaterno, fechaNacimiento);
+
+    std::cout << "\nRFC generado: " << rfc << std::endl;
+
+    return 0;
+}
