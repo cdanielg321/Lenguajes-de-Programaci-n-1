@@ -41,7 +41,7 @@ char obtenerPrimeraVocalInterna(const std::string& str) {
     return 'X'; // Si no hay vocal interna
 }
 
-// Funcion para validar el formato de la fecha (YYY=YYYY-MM-DD)
+// Funcion para validar el formato de la fecha (YYYY-MM-DD)
 bool validarFormatoFecha(const std::string& fecha) {
     if (fecha.length() != 10)
         return false;
