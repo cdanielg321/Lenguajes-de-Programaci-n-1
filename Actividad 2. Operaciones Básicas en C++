@@ -1,0 +1,46 @@
+/****************************
+Actividad no.2 
+Descripcion: Ingreso de 2 Datos, realizar suma, resta, muiltiplicaion y division
+Autor Daniel Gutierrez
+Basado en el codigo del Profesor Francisco Ortega 
+*******************************/
+
+#include <iostream>
+
+int main()
+{
+    float numero1, numero2;
+
+    // Solicitamos los datos al usuario
+    std::cout << "Escribe el primer número: ";
+    std::cin >> numero1;
+
+    std::cout << "Escribe el segundo número: ";
+    std::cin >> numero2;
+
+    // Se realizan las operaciones solicitadas
+    float suma = numero1 + numero2;
+    float resta = numero1 - numero2;
+    float multiplicacion = numero1 * numero2;
+
+    // Validamos para evitar división por cero 
+    float division;
+    if (numero2 != 0) {
+        division = numero1 / numero2;
+    } else {division = 0;
+        std::cout << "Advertencia: No es posible dividir entre cero.\n";
+    }
+
+    // Mostramos de resultados
+    std::cout << "La suma es: " << suma << std::endl;
+    std::cout << "La resta es: " << resta << std::endl;
+    std::cout << "La multiplicación es: " << multiplicacion << std::endl;
+
+    if (numero2 != 0) {
+        std::cout << "La división es: " << division << std::endl;
+    } else {
+        std::cout << "La división es: No se puede dividir entre cero." << std::endl;
+    }
+
+    return 0;
+}
